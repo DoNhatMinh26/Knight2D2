@@ -1,16 +1,20 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    Rigidbody2D rb;
+    private Animator animator;
     private float moveMent;
     [SerializeField] private float moveSpeed = 5f;
     private bool facingRight = true;
-    Rigidbody2D rb;
     [SerializeField] private float jumpHight = 5f;
     private bool isGround = true;
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+
     }
     void Start()
     {
@@ -35,7 +39,20 @@ public class Player : MonoBehaviour
         {
             jump();
             isGround = false;
+            animator.SetBool("Jump", true);
         }
+        if (math.abs(moveMent ) > 0.1f)
+        {
+            animator.SetFloat("Run", 1f);
+        }else if(moveMent < 0.1)
+        {
+            animator.SetFloat("Run", 0f);
+        }
+        if (Input.GetMouseButtonDown(0)) 
+        {
+            animator.SetTrigger("Attack1");
+        }
+
     }
     private void FixedUpdate()
     {
@@ -44,5 +61,13 @@ public class Player : MonoBehaviour
     private void jump()
     {
         rb.AddForce(new Vector2 (0f, jumpHight), ForceMode2D.Impulse);   
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            isGround = true;
+            animator.SetBool("Jump", false);
+        }
     }
 }
