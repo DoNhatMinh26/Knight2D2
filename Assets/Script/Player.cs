@@ -1,14 +1,17 @@
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public int maxHealth = 3;
+    public Text health;
     Rigidbody2D rb;
     private Animator animator;
     private float moveMent;
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float moveSpeed = 10f;
     private bool facingRight = true;
-    [SerializeField] private float jumpHight = 5f;
+    [SerializeField] private float jumpHight = 10f;
     private bool isGround = true;
     private void Awake()
     {
@@ -24,6 +27,13 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (maxHealth <= 0)
+        {
+            
+        }
+
+        health.text = maxHealth.ToString();
+
         moveMent = Input.GetAxis("Horizontal");
         if (moveMent < 0f && facingRight)
         {
