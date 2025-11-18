@@ -12,9 +12,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Ground
+  - Player
+  - Enemy
   - 
   - 
   - 
@@ -39,8 +39,38 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: sky
+    uniqueID: 1137055379
+    locked: 0
+  - name: clouds
+    uniqueID: 4236777157
+    locked: 0
+  - name: sea
+    uniqueID: 3571226337
+    locked: 0
+  - name: Fround
+    uniqueID: 3248509663
+    locked: 0
+  - name: Cau
+    uniqueID: 1979679717
+    locked: 0
+  - name: Ground
+    uniqueID: 3780504293
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: enemy
+    uniqueID: 1509562637
+    locked: 0
+  - name: Player
+    uniqueID: 3859505979
+    locked: 0
+  - name: Grass
+    uniqueID: 2145960899
+    locked: 0
+  - name: HpBar
+    uniqueID: 1410683545
     locked: 0
   m_RenderingLayers:
   - Default
