@@ -4,12 +4,8 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-<<<<<<< Updated upstream
     public int maxHealth = 3;
     public Text health;
-=======
-
->>>>>>> Stashed changes
     Rigidbody2D rb;
     private Animator animator;
     private float moveMent;
@@ -17,20 +13,6 @@ public class Player : MonoBehaviour
     private bool facingRight = true;
     [SerializeField] private float jumpHight = 10f;
     private bool isGround = true;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private Transform groundCheck;
-    private bool jumpPressed = false;
-    [SerializeField] private float maxHealth = 3f;
-    public float MaxHealth
-    {
-        get { return maxHealth; }
-    }
-    [SerializeField] private Transform attackPoint;
-    [SerializeField] private float attackRadius = 1f;
-    [SerializeField] LayerMask LayerPlayer;
-    [SerializeField] float damageP = 1f;
-    private float currentHp;
-    [SerializeField] private Image hpBar;
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -39,43 +21,20 @@ public class Player : MonoBehaviour
     }
     void Start()
     {
-        currentHp = maxHealth;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-<<<<<<< Updated upstream
         if (maxHealth <= 0)
         {
             
         }
 
         health.text = maxHealth.ToString();
-=======
-
-        UpdateHpBar();
-   
-        Movement();
-        jump();
-        Animation();
-        
-    }
-    private void FixedUpdate()
-    {
-        if (jumpPressed == true)
-        {
-            rb.AddForce(new Vector2(0f, jumpHight), ForceMode2D.Impulse);
-            
-            jumpPressed = false;
-        }
-    }
-    private void Movement()
-    {
->>>>>>> Stashed changes
 
         moveMent = Input.GetAxis("Horizontal");
-        transform.position += new Vector3(moveMent, 0f, 0f) * moveSpeed * Time.deltaTime;
         if (moveMent < 0f && facingRight)
         {
             transform.eulerAngles = new Vector3(0f, -180f, 0f);
@@ -86,69 +45,39 @@ public class Player : MonoBehaviour
             transform.eulerAngles = new Vector3(0f, 0f, 0f);
             facingRight = true;
         }
-    }
-    private void jump()
-    {
-        isGround = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-        
-        if (Input.GetButtonDown("Jump") && isGround)
+        if (Input.GetKey(KeyCode.Space) && isGround == true) 
         {
-            jumpPressed = true;
+            jump();
+            isGround = false;
+            animator.SetBool("Jump", true);
         }
-    }
-
-    private void Animation()
-    {
-        bool isJumping = !isGround;
-        animator.SetBool("Jump",isJumping);
-        if (math.abs(moveMent) > 0.1f)
+        if (math.abs(moveMent ) > 0.1f)
         {
             animator.SetFloat("Run", 1f);
-        }
-        else if (moveMent < 0.1)
+        }else if(moveMent < 0.1)
         {
             animator.SetFloat("Run", 0f);
         }
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) 
         {
             animator.SetTrigger("Attack1");
         }
-    }
-    
-    private void Attack()
-    {
-        Collider2D collInfo = Physics2D.OverlapCircle(attackPoint.position, attackRadius, LayerPlayer);
-        if (collInfo)
-        {
-            if (collInfo.gameObject.GetComponent<patrolEnemy>() != null)
-            {
-                collInfo.gameObject.GetComponent<patrolEnemy>().takeDamageE(damageP);
-            }
-        }
-    }
-    public void TakeDamageP(float damage)
-    {
-        currentHp -= damage;
-        currentHp = Mathf.Max(currentHp, 0);
-        if (currentHp <= 0) Die();
-    }
-    private void Die()
-    {
-
-        Destroy(this.gameObject);
 
     }
-    private void UpdateHpBar()
+    private void FixedUpdate()
     {
-        if (hpBar != null)
-        {
-            hpBar.fillAmount = currentHp / maxHealth;
-        }
+        transform.position += new Vector3(moveMent, 0f, 0f) *moveSpeed* Time.deltaTime;
     }
-    private void OnDrawGizmosSelected()
+    private void jump()
     {
-        if (attackPoint == null) return;
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+        rb.AddForce(new Vector2 (0f, jumpHight), ForceMode2D.Impulse);   
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            isGround = true;
+            animator.SetBool("Jump", false);
+        }
     }
 }
